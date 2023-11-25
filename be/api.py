@@ -4,7 +4,7 @@ from sentence_transformers import SentenceTransformer, util
 import torch
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for the Flask app
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins
 
 # Load a Pre-trained Model
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -43,6 +43,11 @@ def find_similar_movies(query, top_k=1):
 # similar_movies = find_similar_movies(query)
 # print("Similar Movies:", similar_movies)
 
+@app.route('/movies', methods=['GET'])
+def get_movies():
+    # Return the movies with their descriptions
+    return jsonify(movies)
+   
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', '')  # Get the query from URL parameter

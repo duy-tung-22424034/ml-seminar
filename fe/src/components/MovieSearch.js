@@ -10,7 +10,7 @@ const MovieSearch = () => {
         // Function to fetch current movies with descriptions
         const fetchMovies = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/movies`);
+                const response = await fetch(`http://localhost:5000/movies`);
                 const data = await response.json();
                 // Convert the object to an array of movie objects
                 const moviesArray = Object.entries(data).map(([title, description]) => ({
@@ -34,7 +34,7 @@ const MovieSearch = () => {
 
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3000/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`http://localhost:5000/search?query=${encodeURIComponent(query)}`);
             const data = await response.json();
             setResults(data.length && query.length ? data : movies); // Assuming the response is an array of search results
         } catch (error) {

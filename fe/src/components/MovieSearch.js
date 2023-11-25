@@ -4,13 +4,14 @@ const MovieSearch = () => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
     const [movies, setMovies] = useState([]); // State for the current list of movies
+    const [searchPerformed, setSearchPerformed] = useState(false); // State to track if search has been performed
 
     useEffect(() => {
 
         // Function to fetch current movies with descriptions
         const fetchMovies = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/movies`);
+                const response = await fetch(`https://obscure-space-sniffle-v6pjq95q7qwc6wvv-5000.app.github.dev/movies`);
                 const data = await response.json();
                 // Convert the object to an array of movie objects
                 const moviesArray = Object.entries(data).map(([title, description]) => ({
@@ -30,26 +31,47 @@ const MovieSearch = () => {
 
     }, []);
 
-    const handleSearch = async (e) => {
-
-        e.preventDefault();
-        try {
-            const response = await fetch(`http://localhost:5000/search?query=${encodeURIComponent(query)}`);
-            const data = await response.json();
-            setResults(data.length && query.length ? data : movies); // Assuming the response is an array of search results
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
     // Function to determine which list to display
     const getListToDisplay = () => {
         return results;
     };
 
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                const response = await fetch(`https://obscure-space-sniffle-v6pjq95q7qwc6wvv-5000.app.github.dev/movies`);
+                const data = await response.json();
+                const moviesArray = Object.entries(data).map(([title, description]) => ({
+                    title,
+                    description,
+                }));
+                console.log('moviesArray', moviesArray)
+                setMovies(moviesArray);
+                setResults(moviesArray)
+            } catch (error) {
+                console.error("Error fetching movies:", error);
+            }
+        };
+
+        fetchMovies();
+    }, []);
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        setSearchPerformed(true); // Set searchPerformed to true when search is initiated
+        try {
+            const response = await fetch(`https://obscure-space-sniffle-v6pjq95q7qwc6wvv-5000.app.github.dev/search?query=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            setResults(data.length && query.length ? data : movies);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
     const changeSearchStr = (str) => {
         setQuery(str);
         !str && setResults(movies);
+        !str && setSearchPerformed(false); // Reset searchPerformed when query is cleared
     }
 
     return (
@@ -79,7 +101,7 @@ const MovieSearch = () => {
 
             <div className="w-fullx px-4 m-auto mt-16 max-w-max w-full">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-3">
-                    {query.length > 0 ? "Search Results:" : "Current Movies:"}
+                    {searchPerformed ? "Search Results:" : "Current Movies:"}
                 </h2>
                 <ul className="bg-white shadow rounded divide-y divide-gray-200">
                     {getListToDisplay().map((movie, index) => (

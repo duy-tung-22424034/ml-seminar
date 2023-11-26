@@ -12,11 +12,11 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 # Prepare the Movie Database
 movies = {
     'Stepbrother': 'Comedic journey full of adult humor and awkwardness.',
-    'The Matrix': 'Deals with alternate realities and questioning what\'s real.',
+    'The Matrix': 'Deals with alternate realities and questioning what is real.',
     'Shutter Island': 'A mind-bending plot with twists and turns.',
-    'Memento': 'A non-linear narrative that challenges the viewer\'s perception.',
+    'Memento': 'A non-linear narrative that challenges the viewer perception.',
     'Doctor Strange': 'Features alternate dimensions and reality manipulation.',
-    'Paw Patrol': 'Children\'s animated movie where a group of adorable puppies save people from all sorts of emergencies.',
+    'Paw Patrol': 'Children animated movie where a group of adorable puppies save people from all sorts of emergencies.',
     'Interstellar': 'Features futuristic space travel with high stakes'
 }
 
@@ -56,4 +56,4 @@ def search():
     return jsonify(similar_movies)
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Set debug=False in a production environment
+    app.run(debug=True, port=5001)  # Set debug=False in a production environment
